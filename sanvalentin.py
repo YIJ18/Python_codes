@@ -1,24 +1,57 @@
-# Crear el archivo amigos.txt con nombres de ejemplo
-with open("amigos.txt", "w", encoding="utf-8") as file:
-    file.write("Carlos\nAna\nLuis\nMaría\nPedro")
+# Diccionario con productos y precios fijos
+tienda = {
+    "Rosas rojas": 15,
+    "Chocolates": 10,
+    "Collar": 50,
+    "Cena romántica": 100,
+    "Peluche": 20,
+    "Perfume": 30
+}
 
-# Crear el archivo plantilla.txt con una plantilla de ejemplo
-with open("plantilla.txt", "w", encoding="utf-8") as file:
-    file.write("Hola {nombre},\n\nEspero que estés teniendo un gran día. ¡Nos vemos pronto!\n\nSaludos,\nTu amigo.")
+# Función para mostrar los productos disponibles
+def mostrar_tienda():
+    print("Bienvenido a la tienda de regalos para San Valentín. Aquí están los productos disponibles:")
+    for producto, precio in tienda.items():
+        print(f"{producto}: ${precio} MXN")
 
-# Leer los archivos y generar las cartas
-with open("amigos.txt", "r", encoding="utf-8") as file:
-    amigos = [line.strip() for line in file.readlines()]
+# Función para calcular el costo total basado en la selección del usuario
+def calcular_total(seleccion):
+    total = 0
+    for producto, cantidad in seleccion.items():
+        total += tienda[producto] * cantidad
+    return total
 
-with open("plantilla.txt", "r", encoding="utf-8") as file:
-    plantilla = file.read()
+# Función para que el usuario seleccione los regalos
+def seleccionar_regalos():
+    seleccion = {}
+    while True:
+        mostrar_tienda()
+        producto = input("\n¿Qué producto te gustaría comprar? (escribe 'salir' para terminar): ")
+        
+        if producto.lower() == "salir":
+            break
+        
+        if producto in tienda:
+            cantidad = int(input(f"¿Cuántos {producto} deseas? "))
+            seleccion[producto] = cantidad
+        else:
+            print("Lo siento, no tenemos ese producto en la tienda.")
+    
+    return seleccion
 
-def generar_cartas():
-    for amigo in amigos:
-        contenido_personalizado = plantilla.replace("{nombre}", amigo)
-        nombre_archivo = f"carta_{amigo}.txt"
-        with open(nombre_archivo, "w", encoding="utf-8") as carta:
-            carta.write(contenido_personalizado)
-    print("Cartas generadas exitosamente.")
+# Función principal
+def main():
+    print("¡Bienvenido a la tienda de San Valentín!")
+    seleccion = seleccionar_regalos()
+    
+    if seleccion:
+        total = calcular_total(seleccion)
+        print("\nResumen de tu compra:")
+        for producto, cantidad in seleccion.items():
+            print(f"{producto} x{cantidad}: ${tienda[producto] * cantidad} MXN")
+        print(f"Total a pagar: ${total} MXN")
+    else:
+        print("No has seleccionado ningún producto. ¡Hasta la próxima!")
 
-generar_cartas()
+if __name__ == "__main__":
+    main()
