@@ -1,0 +1,6 @@
+Hola {nombre},
+
+Espero que estés teniendo un gran día. ¡Nos vemos pronto!
+
+Saludos,
+Tu amigo.

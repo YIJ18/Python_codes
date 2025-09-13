@@ -1,0 +1,42 @@
+import smtplib
+from email.message import EmailMessage
+from email.utils import make_msgid
+import os
+from cryptography.fernet import Fernet
+
+# --- Desencriptar password ---
+with open('clave.key', 'rb') as key_file:
+    clave = key_file.read()
+fernet = Fernet(clave)
+with open('password.enc', 'rb') as enc_file:
+    password = fernet.decrypt(enc_file.read()).decode()
+
+# --- Cargar HTML desde archivo ---
+with open('mensaje.html', 'r') as f:
+    contenido_html = f.read()
+
+# --- Crear mensaje ---
+mensaje = EmailMessage()
+mensaje['From'] = 'correo_fake@hotmail.com'
+mensaje['To'] = 'p37676@correo.uia.mx,tu_correo_de_alumno@correo.uia.mx'
+mensaje['Subject'] = 'Correo HTML con archivo adjunto'
+
+mensaje.set_content("Este es el contenido alternativo en texto plano.", subtype='plain')
+mensaje.add_alternative(contenido_html, subtype='html')
+
+# --- Adjuntar archivo ---
+nombre_archivo = 'archivo.pdf'
+with open(nombre_archivo, 'rb') as adjunto:
+    mensaje.add_attachment(adjunto.read(), maintype='application', subtype='pdf', filename=nombre_archivo)
+
+# --- Enviar correo ---
+try:
+    servidor = smtplib.SMTP('smtp-mail.outlook.com', 587)
+    servidor.ehlo()
+    servidor.starttls()
+    servidor.login('correo_fake@hotmail.com', password)
+    servidor.send_message(mensaje)
+    servidor.quit()
+    print("Correo enviado exitosamente")
+except Exception as e:
+    print(f"Error al enviar correo: {e}")

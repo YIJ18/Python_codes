@@ -1,0 +1,18 @@
+<!-- peliculas/templates/peliculas/lista.html -->
+<!DOCTYPE html>
+<html>
+<head><title>Películas</title></head>
+<body>
+  <h1>Películas</h1>
+  <a href="{% url 'agregar' %}">Agregar nueva película</a>
+  <ul>
+    {% for p in peliculas %}
+      <li>{{ p.titulo }} - {{ p.director }} - {{ p.genero }}</li>
+    {% empty %}
+      <li>No hay películas registradas.</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
+
+

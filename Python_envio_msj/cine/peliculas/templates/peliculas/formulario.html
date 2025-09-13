@@ -1,0 +1,16 @@
+<!-- peliculas/templates/peliculas/lista.html -->
+<!DOCTYPE html>
+<html>
+<head><title>Películas</title></head>
+<body>
+  <h1>Agregar Película</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+  </form>
+  <a href="{% url 'lista' %}">Volver</a>
+</body>
+</html>
+ 
+
